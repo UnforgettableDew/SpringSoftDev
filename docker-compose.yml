@@ -1,0 +1,16 @@
+version: '3'
+services:
+  postgres:
+    image: 'postgres:latest'
+    container_name: test_task
+    environment:
+      POSTGRES_USER: unforgettable
+      POSTGRES_PASSWORD: 27092100
+      POSTGRES_DB: test_task
+    #    volumes:
+    #      - postgres:/data/postgres
+    ports:
+      - "5434:5432"
+    #    networks:
+    #      - postgres
+    restart: unless-stopped

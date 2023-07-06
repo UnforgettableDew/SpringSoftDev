@@ -1,0 +1,11 @@
+spring:
+  datasource:
+    username: 'unforgettable'
+    password: '27092100'
+    url: jdbc:postgresql://localhost:5434/test_task
+  jpa:
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+        format_sql: true
+    show-sql: true
