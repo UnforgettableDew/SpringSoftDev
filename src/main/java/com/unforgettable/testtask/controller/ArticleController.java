@@ -1,6 +1,7 @@
 package com.unforgettable.testtask.controller;
 
 import com.unforgettable.testtask.entity.Article;
+import com.unforgettable.testtask.enums.RequestType;
 import com.unforgettable.testtask.model.CommonResponse;
 import com.unforgettable.testtask.service.ArticleService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,27 +27,24 @@ public class ArticleController {
     public ResponseEntity<List<Article>> findArticlesBySiteId(@PathVariable Long siteId) {
         return ResponseEntity.ok(articleService.findArticlesBySiteId(siteId));
     }
-
     @PostMapping("/site/{siteId}")
-    public ResponseEntity<CommonResponse> addArticlesBySiteId(@PathVariable Long siteId,
-                                                              @RequestBody List<@Valid Article> articles) {
-        return ResponseEntity.ok(articleService.addArticlesBySiteId(siteId, articles));
-    }
-
-    @PutMapping("/site/{siteId}")
-    public ResponseEntity<CommonResponse> updateArticlesBySiteId(@PathVariable Long siteId,
-                                                                 @RequestBody List<Article> articles) {
-        return ResponseEntity.ok(articleService.updateArticlesBySiteId(siteId, articles));
-    }
-
-    @DeleteMapping("/site/{siteId}")
-    public ResponseEntity<CommonResponse> deleteArticlesBySiteId(@PathVariable Long siteId,
-                                                                 @RequestBody List<Article> articles) {
-        return ResponseEntity.ok(articleService.deleteArticlesBySiteId(siteId, articles));
+    public ResponseEntity<CommonResponse> doArticlesBySiteId(@PathVariable Long siteId,
+                                                             @RequestBody List<@Valid Article> articles,
+                                                             @RequestHeader(name = "Request-type") RequestType requestType) {
+        switch (requestType.name()){
+            case "POST":
+                return ResponseEntity.ok(articleService.addArticlesBySiteId(siteId, articles));
+            case "PUT":
+                return ResponseEntity.ok(articleService.updateArticlesBySiteId(siteId, articles));
+            case "DELETE":
+                return ResponseEntity.ok(articleService.deleteArticlesBySiteId(siteId, articles));
+            default:
+                return ResponseEntity.badRequest().body(new CommonResponse("Request-type header is invalid"));
+        }
     }
 
     @PostMapping("/duplicates")
-    public ResponseEntity<List<Article>> findDuplicateArticles(@RequestBody @Valid Article article){
+    public ResponseEntity<List<Article>> findDuplicateArticles(@RequestBody @Valid Article article) {
         return ResponseEntity.ok(articleService.findDuplicateArticles(article));
     }
 }
